@@ -17,6 +17,7 @@ app.use(
 );
 app.use(userRouter);
 app.use(secretRouter);
+console.log(process.env);
 
 const port = process.env.PORT || 3000;
 
