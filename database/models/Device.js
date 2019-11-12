@@ -15,6 +15,10 @@ module.exports = require('../index').define(
     ip: {
       type: sequilize.INTEGER,
       allowNull: false
+    },
+    status: {
+      type: sequilize.BOOLEAN,
+      allowNull: false
     }
   },
   {
