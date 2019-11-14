@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm install --prefix client && npm run dev",
+    "start": "npm run dev",
     "server": "nodemon index.js",
     "client": "npm start --prefix client",
-    "dev": "chcp.com 65001 && concurrently \"npm run server\" \"npm run client\" "
+    "dev": "concurrently \"npm run server\" \"npm run client\" "
   },
   "engines": {
     "node": "10.16.0",
