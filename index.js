@@ -11,14 +11,6 @@ const app = express();
 
 app.use(morgan("combined"));
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-  });
-}
-
 const userRouter = require("./routes/user");
 const deviceRouter = require("./routes/device");
 const db = require("./database");
@@ -55,6 +47,12 @@ const port = process.env.PORT || 4000;
 db.authenticate()
   .then(() => console.log("Connected to Postgres DB"))
   .catch(err => console.log(err.message));
+
+app.use(express.static("client/build"));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+});
 
 app.listen(port, () =>
   console.log(`Server is running at http://localhost:${port}`)
