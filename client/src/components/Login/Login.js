@@ -1,92 +1,146 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState } from "react";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import LockOpenIcon from "@material-ui/icons/LockOpen";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import { RouterLink } from "../../helpers";
+import { Redirect } from "react-router-dom";
+import axios from "axios";
 
-class Login extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password: '',
-      submitted: false
-    };
+const useStyles = makeStyles(theme => ({
+  paper: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.primary.light
+  },
+  form: {
+    width: "100%",
+    marginTop: theme.spacing(3)
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2)
+  },
+  container: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh"
   }
+}));
 
-  handleChange = e => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
+export default function SignUp(props) {
+  const [state, setState] = useState({
+    email: "",
+    password: "",
+    isLoggedIn: false
+  });
+  const { handleAction } = props;
+  const classes = useStyles();
+
+  const handleChange = ({ target }) => {
+    const key = target["name"];
+    setState(state => {
+      return { ...state, [key]: target.value };
+    });
   };
 
-  handleSubmit = e => {
+  const handleSumbit = e => {
     e.preventDefault();
-
-    this.setState({ submitted: true });
-    const { email, password } = this.state;
-    if (email && password) {
-      axios
-        .post('/login', {
-          email,
-          password
-        })
-        .then(res => console.log(res))
-        .catch(err => console.log(err));
-    }
+    const data = {
+      email,
+      password
+    };
+    axios
+      .post("/login", data)
+      .then(({ data }) => {
+        handleAction(data);
+        setState({
+          email: "",
+          password: "",
+          ...data
+        });
+      })
+      .catch(err => console.log(err));
   };
 
-  render() {
-    const { email, password, submitted } = this.state;
+  const { email, password, isLoggedIn } = state;
+
+  if (isLoggedIn) {
+    return <Redirect to="table" />;
+  } else {
     return (
-      <div className="vh-100 d-flex bg-light align-items-center justify-content-center">
-        <div className="col-md-6 col-md-offset-3 bg-light">
-          <h2>Login</h2>
-          <form name="form" onSubmit={this.handleSubmit}>
-            <div
-              className={
-                'form-group' + (submitted && !email ? ' has-error' : '')
-              }
+      <Container className={classes.container} component="main" maxWidth="xs">
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOpenIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Log In
+          </Typography>
+          <form className={classes.form} onSubmit={handleSumbit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  onChange={handleChange}
+                  value={email}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  onChange={handleChange}
+                  value={password}
+                />
+              </Grid>
+            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
             >
-              <label htmlFor="email">Email</label>
-              <input
-                type="text"
-                className="form-control"
-                name="email"
-                value={email}
-                onChange={this.handleChange}
-              />
-              {submitted && !email && (
-                <div className="help-block text-danger">Email is required</div>
-              )}
-            </div>
-            <div
-              className={
-                'form-group' + (submitted && !password ? ' has-error' : '')
-              }
-            >
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                className="form-control"
-                name="password"
-                value={password}
-                onChange={this.handleChange}
-              />
-              {submitted && !password && (
-                <div className="help-block text-danger">
-                  Password is required
-                </div>
-              )}
-            </div>
-            <div className="form-group">
-              <button className="btn btn-primary">Login</button>
-              <Link to="/register" className="btn btn-link">
-                Register
-              </Link>
-            </div>
+              Sign Up
+            </Button>
           </form>
+          <Grid container justify="center">
+            <Grid item>
+              <Link
+                variant="body1"
+                color="textSecondary"
+                to="/register"
+                component={RouterLink}
+              >
+                Not registered yet? Sign Up
+              </Link>
+            </Grid>
+          </Grid>
         </div>
-      </div>
+      </Container>
     );
   }
 }
-
-export default Login;

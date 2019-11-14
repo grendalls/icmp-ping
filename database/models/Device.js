@@ -1,7 +1,8 @@
-const sequilize = require('sequelize');
+const sequilize = require("sequelize");
+const updatePk = require("../../helpers").updatePk;
 
-module.exports = require('../index').define(
-  'Device',
+const Device = require("../index").define(
+  "Device",
   {
     id: {
       type: sequilize.INTEGER,
@@ -13,15 +14,20 @@ module.exports = require('../index').define(
       allowNull: false
     },
     ip: {
-      type: sequilize.INTEGER,
+      type: sequilize.STRING(15),
       allowNull: false
     },
     status: {
       type: sequilize.BOOLEAN,
-      allowNull: false
+      allowNull: false,
+      defaultValue: false
     }
   },
   {
     timestamps: false
   }
 );
+
+Device.updatePk = updatePk.bind(Device);
+
+module.exports = Device;

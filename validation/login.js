@@ -1,22 +1,23 @@
-const Validator = require('validator');
+const Validator = require("validator");
+const isEmptyObject = require("../helpers").isEmptyObject;
 
 module.exports = data => {
-  let errors = {};
+  errors = {};
 
   if (!Validator.isEmail(data.email)) {
-    errors.email = 'Email is invalid';
+    errors.email = "Email is invalid";
   }
 
   if (Validator.isEmpty(data.email)) {
-    errors.email = 'Email field is required';
+    errors.email = "Email field is required";
   }
 
   if (Validator.isEmpty(data.password)) {
-    errors.password = 'Password field is required';
+    errors.password = "Password field is required";
   }
 
   return {
     errors,
-    isValid: Object.keys(errors).length === 0
+    isValid: isEmptyObject(errors)
   };
 };

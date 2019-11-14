@@ -1,33 +1,65 @@
-import React from 'react';
-import './App.css';
-import Login from '../Login';
-import Register from '../Register';
-import { BrowserRouter, Route } from 'react-router-dom';
-import Header from '../Header';
-import Container from 'react-bootstrap/Container';
-import DeviceTable from '../DeviceTable';
+import React, { Component } from "react";
+import "./App.css";
+import Login from "../Login";
+import Register from "../Register";
+import { BrowserRouter, Route, Redirect } from "react-router-dom";
+import Header from "../Header";
+import DeviceTable from "../DeviceTable";
+import { Box } from "@material-ui/core";
 
-const PageOne = () => {
-  return <div>Page One</div>;
-};
+class App extends Component {
+  state = {
+    isLoggedIn: false,
+    devices: []
+  };
+  handleAction = isOk => {
+    this.setState(state => {
+      return { ...state, ...isOk };
+    });
+  };
+  handleSignOut = () => {
+    this.setState(state => {
+      return { ...state, isLoggedIn: false };
+    });
+  };
+  render() {
+    const { isLoggedIn } = this.state;
 
-const PageTwo = () => {
-  return <div>Page Two</div>;
-};
-
-function App() {
-  return (
-    <div className="App vh-100">
+    return (
       <BrowserRouter>
-        <Header />
-        <Container>
-          <Route exact path="/" component={Login} />
+        {isLoggedIn ? (
+          <Header handleSignOut={() => this.handleSignOut()} />
+        ) : null}
+        <Box
+          height="100vh"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Route
+            exact
+            path="/"
+            render={props => {
+              return (
+                <Login
+                  {...props}
+                  handleAction={isOk => this.handleAction(isOk)}
+                />
+              );
+            }}
+          />
           <Route exact path="/register" component={Register} />
-          <Route exact path="/table" component={DeviceTable} />
-        </Container>
+          <Route
+            exact
+            path="/table"
+            render={() => {
+              return isLoggedIn ? <DeviceTable /> : <Redirect to="/" />;
+            }}
+          />
+        </Box>
       </BrowserRouter>
-    </div>
-  );
+    );
+  }
 }
 
 export default App;

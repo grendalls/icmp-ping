@@ -1,7 +1,7 @@
-const sequelize = require('sequelize');
+const sequelize = require("sequelize");
 
-module.exports = require('../index').define(
-  'User',
+module.exports = require("../index").define(
+  "User",
   {
     id: {
       type: sequelize.INTEGER,

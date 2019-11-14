@@ -8,7 +8,7 @@
     "start": "npm install --prefix client && npm run dev",
     "server": "nodemon index.js",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\" "
+    "dev": "chcp.com 65001 && concurrently \"npm run server\" \"npm run client\" "
   },
   "engines": {
     "node": "10.16.0",
@@ -21,10 +21,12 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "concurrently": "^5.0.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "express-session-sequelize": "^2.1.0",
+    "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pg": "^7.12.1",

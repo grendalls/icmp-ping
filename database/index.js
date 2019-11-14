@@ -1,10 +1,11 @@
-const sequelize = require('sequelize').Sequelize;
+const sequelize = require("sequelize").Sequelize;
+const { Model } = require("sequelize");
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === "production") {
   const { DATABASE_URL } = process.env;
   module.exports = new sequelize(DATABASE_URL, {
     ssl: true,
-    dialect: 'postgres',
+    dialect: "postgres",
     pool: {
       min: 0,
       max: 5,
@@ -13,13 +14,13 @@ if (process.env.NODE_ENV === 'production') {
     }
   });
 } else {
-  require('dotenv').config();
+  require("dotenv").config();
 
   const { DB_NAME, DB_PASSWORD, DB_USER, DB_HOST, DB_PORT } = process.env;
 
   module.exports = new sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
     ssl: true,
-    dialect: 'postgres',
+    dialect: "postgres",
     host: DB_HOST,
     port: DB_PORT,
     pool: {
