@@ -1,4 +1,4 @@
-const expess = require("express");
+const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const passport = require("passport");
@@ -7,7 +7,7 @@ const path = require("path");
 const morgan = require("morgan");
 const sequelizeStore = require("express-session-sequelize")(session.Store);
 
-const app = expess();
+const app = express();
 
 app.use(morgan("combined"));
 
